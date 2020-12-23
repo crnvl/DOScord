@@ -1,18 +1,15 @@
 package doscord.commands;
 
-import doscord.tools.Directory;
-import doscord.tools.Response;
 import doscord.tools.Screen;
 import doscord.tools.ScreenBuilder;
 import doscord.tools.commandProcessing.Command;
 import doscord.tools.handlers.CommandOutputHandler;
-import doscord.tools.states.ResponseState;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class DosCD implements Command {
+public class DosDir implements Command {
     @Override
     public boolean called(String[] args, MessageReceivedEvent event) {
         return false;
@@ -20,6 +17,11 @@ public class DosCD implements Command {
 
     @Override
     public void action(String[] args, MessageReceivedEvent event) {
+
+    }
+
+    @Override
+    public void executed(boolean success, MessageReceivedEvent event) {
 
         Screen screen = new Screen(event.getAuthor().getId());
         screen.load();
@@ -31,30 +33,37 @@ public class DosCD implements Command {
 
         location = screen.get("location");
 
-        String newLoc, cmd, rsp;
-        Response response = new Response("cd");
-        if (args.length >= 1) {
-            cmd = "cd " + args[0];
-            newLoc = Directory.sub(event.getAuthor().getId(), location, args[0]);
-            rsp = response.getMessage(event.getAuthor().getId(), ResponseState.VALID);
+        String returning;
+        if (location.contains("channels")) {
+            int max = 10;
+            boolean more = false;
+            int channel;
+
+            if (max > event.getGuild().getTextChannels().size())
+                max = event.getGuild().getTextChannels().size();
+            else
+                more = true;
+
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i < max; i++) {
+                builder.append("#" + event.getGuild().getTextChannels().get(i).getName() + " | " + event.getGuild().getTextChannels().get(i).getId() + "\n");
+            }
+            if (more) {
+                channel = event.getGuild().getTextChannels().size() - max;
+                builder.append("And " + channel + " more...");
+            }
+
+            returning = builder.toString();
         } else {
-            cmd = "cd";
-            newLoc = location;
-            rsp = response.getMessage(event.getAuthor().getId(), ResponseState.INVALID);
+            returning = "This Folder is empty.";
         }
 
+
         List<String> commands = new ArrayList<>();
-        commands.add(CommandOutputHandler.commandOutput(cmd, rsp));
+        commands.add(CommandOutputHandler.commandOutput("dir", returning));
 
-        screen.save("location", newLoc);
-        screen.close();
-        ScreenBuilder screenBuilder = new ScreenBuilder(newLoc, commands);
-
+        ScreenBuilder screenBuilder = new ScreenBuilder(location, commands);
         event.getTextChannel().sendMessage(screenBuilder.getWindow()).queue();
-    }
-
-    @Override
-    public void executed(boolean success, MessageReceivedEvent event) {
 
     }
 
