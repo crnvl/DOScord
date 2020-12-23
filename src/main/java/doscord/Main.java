@@ -1,6 +1,9 @@
 package doscord;
 
+import doscord.commands.DosCD;
 import doscord.config.Config;
+import doscord.listener.Commander;
+import doscord.tools.commandProcessing.CommandHandler;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.utils.Compression;
@@ -23,8 +26,14 @@ public class Main {
         builder.setBulkDeleteSplittingEnabled(false);
         builder.setCompression(Compression.NONE);
 
-        builder.build();
+        builder.addEventListeners(new Commander());
 
+        builder.build();
+        Commands();
+    }
+
+    public static void Commands() {
+        CommandHandler.commands.put("cd", new DosCD());
     }
 
 }

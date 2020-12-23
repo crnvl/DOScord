@@ -2,3 +2,4 @@ src/test/
 src/main/resources/
 .idea/
 *.dc
+*.class
