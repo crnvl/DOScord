@@ -46,7 +46,7 @@ public class DosDir implements Command {
 
             StringBuilder builder = new StringBuilder();
             for (int i = 0; i < max; i++) {
-                builder.append("#" + event.getGuild().getTextChannels().get(i).getName() + " | " + event.getGuild().getTextChannels().get(i).getId() + "\n");
+                builder.append("#" + event.getGuild().getTextChannels().get(i).getName() + " (" + event.getGuild().getTextChannels().get(i).getId() + ")\n");
             }
             if (more) {
                 channel = event.getGuild().getTextChannels().size() - max;
