@@ -4,6 +4,7 @@ import doscord.tools.Screen;
 import doscord.tools.ScreenBuilder;
 import doscord.tools.commandProcessing.Command;
 import doscord.tools.handlers.CommandOutputHandler;
+import doscord.tools.states.Guild;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.ArrayList;
@@ -24,18 +25,14 @@ public class DosDir implements Command {
     public void executed(boolean success, MessageReceivedEvent event) {
 
         Screen screen = new Screen(event.getAuthor().getId());
-        screen.load();
+        Guild.baseLocation(event.getGuild().getName(), event.getAuthor().getId());
         String location;
-        if (!screen.isReal("location")) {
-            screen.save("location", "U:\\" + event.getGuild().getName());
-            screen.close();
-        }
 
         location = screen.get("location");
 
         String returning;
         if (location.contains("channels")) {
-            int max = 10;
+            int max = 100;
             boolean more = false;
             int channel;
 
@@ -46,7 +43,7 @@ public class DosDir implements Command {
 
             StringBuilder builder = new StringBuilder();
             for (int i = 0; i < max; i++) {
-                builder.append("#" + event.getGuild().getTextChannels().get(i).getName() + " (" + event.getGuild().getTextChannels().get(i).getId() + ")\n");
+                builder.append(event.getGuild().getTextChannels().get(i).getName() + "\\\n");
             }
             if (more) {
                 channel = event.getGuild().getTextChannels().size() - max;
@@ -60,7 +57,7 @@ public class DosDir implements Command {
 
 
         List<String> commands = new ArrayList<>();
-        commands.add(CommandOutputHandler.commandOutput("dir", returning));
+        commands.add(CommandOutputHandler.commandOutput("ls", returning));
 
         ScreenBuilder screenBuilder = new ScreenBuilder(location, commands);
         event.getTextChannel().sendMessage(screenBuilder.getWindow()).queue();

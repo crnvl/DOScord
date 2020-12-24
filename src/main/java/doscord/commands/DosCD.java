@@ -6,6 +6,7 @@ import doscord.tools.Screen;
 import doscord.tools.ScreenBuilder;
 import doscord.tools.commandProcessing.Command;
 import doscord.tools.handlers.CommandOutputHandler;
+import doscord.tools.states.Guild;
 import doscord.tools.states.ResponseState;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DosCD implements Command {
+
     @Override
     public boolean called(String[] args, MessageReceivedEvent event) {
         return false;
@@ -22,12 +24,8 @@ public class DosCD implements Command {
     public void action(String[] args, MessageReceivedEvent event) {
 
         Screen screen = new Screen(event.getAuthor().getId());
-        screen.load();
+        Guild.baseLocation(event.getGuild().getName(), event.getAuthor().getId());
         String location;
-        if (!screen.isReal("location")) {
-            screen.save("location", "U:\\" + event.getGuild().getName());
-            screen.close();
-        }
 
         location = screen.get("location");
 

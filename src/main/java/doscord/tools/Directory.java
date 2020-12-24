@@ -21,7 +21,7 @@ public class Directory {
                     screen.close();
                 }
             }
-            case "../" -> {
+            case ".." -> {
                 StringBuilder builder = new StringBuilder();
                 String[] dir = location.split("\\\\");
                 if (dir.length >= 3) {

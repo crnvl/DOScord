@@ -1,0 +1,4 @@
+cd base
+file basefile
+file basefile cd ..
+start basefile 

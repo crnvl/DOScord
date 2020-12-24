@@ -2,6 +2,8 @@ package doscord;
 
 import doscord.commands.DosCD;
 import doscord.commands.DosDir;
+import doscord.commands.DosFile;
+import doscord.commands.DosStart;
 import doscord.config.Config;
 import doscord.listener.Commander;
 import doscord.tools.commandProcessing.CommandHandler;
@@ -35,7 +37,9 @@ public class Main {
 
     public static void Commands() {
         CommandHandler.commands.put("cd", new DosCD());
-        CommandHandler.commands.put("dir", new DosDir());
+        CommandHandler.commands.put("ls", new DosDir());
+        CommandHandler.commands.put("file", new DosFile());
+        CommandHandler.commands.put("start", new DosStart());
     }
 
 }
