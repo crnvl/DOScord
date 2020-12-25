@@ -1,2 +1,2 @@
 # DOScord
-DOS Simulation for Discord.
+OS Simulation including dcScript compatibility for Discord.

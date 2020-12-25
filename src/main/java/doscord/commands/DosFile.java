@@ -1,6 +1,7 @@
 package doscord.commands;
 
 import com.google.common.io.Files;
+import doscord.tools.Attachment;
 import doscord.tools.Screen;
 import doscord.tools.ScreenBuilder;
 import doscord.tools.commandProcessing.Command;
@@ -30,7 +31,7 @@ public class DosFile implements Command {
 
         String returning;
         if (args.length >= 1) {
-            File file = new File(System.getProperty("user.dir") + "/screens\\drive\\" + location.replace("U:\\", "") + "\\" + args[0] + ".dcScript");
+            File file = new File(System.getProperty("user.dir") + "\\screens\\drive\\" + location.replace("U:\\", "") + "\\" + args[0] + ".dcScript");
             try {
                 if (!file.exists()) {
                     Files.createParentDirs(file);
@@ -55,7 +56,16 @@ public class DosFile implements Command {
                 returning = "Failed to create " + location + "\\" + args[0] + ".dcScript" + "\n" + e.getMessage();
             }
         } else {
-            returning = "No Filename specified";
+            if (event.getMessage().getAttachments().size() >= 1) {
+                try {
+                    Attachment.download(event.getMessage().getAttachments().get(0).getUrl(), System.getProperty("user.dir") + "\\screens\\drive\\" + location.replace("U:\\", "") + "\\" + event.getMessage().getAttachments().get(0).getFileName());
+                    returning = "Uploaded " + System.getProperty("user.dir") + "/screens\\drive\\" + location.replace("U:\\", "") + "\\" + event.getMessage().getAttachments().get(0).getFileName();
+                } catch (IOException e) {
+                    returning = "Upload Failed!";
+                }
+            } else {
+                returning = "No Filename specified";
+            }
         }
 
         List<String> commands = new ArrayList<>();

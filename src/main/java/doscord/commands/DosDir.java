@@ -7,7 +7,10 @@ import doscord.tools.handlers.CommandOutputHandler;
 import doscord.tools.states.Guild;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
+import java.io.File;
+import java.io.FilenameFilter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class DosDir implements Command {
@@ -31,30 +34,24 @@ public class DosDir implements Command {
         location = screen.get("location");
 
         String returning;
-        if (location.contains("channels")) {
-            int max = 100;
-            boolean more = false;
-            int channel;
 
-            if (max > event.getGuild().getTextChannels().size())
-                max = event.getGuild().getTextChannels().size();
-            else
-                more = true;
+        File folder = new File(System.getProperty("user.dir") + "\\screens\\drive\\" + location.replace("U:\\", "") + "\\");
+        File[] listOfFiles = folder.listFiles();
 
-            StringBuilder builder = new StringBuilder();
-            for (int i = 0; i < max; i++) {
-                builder.append(event.getGuild().getTextChannels().get(i).getName() + "\\\n");
+        StringBuilder dirs = new StringBuilder();
+        StringBuilder files = new StringBuilder();
+        try {
+            for (int i = 0; i < listOfFiles.length; i++) {
+                if (listOfFiles[i].isFile()) {
+                    files.append(listOfFiles[i].getName() + "\n");
+                } else if (listOfFiles[i].isDirectory()) {
+                    dirs.append(listOfFiles[i].getName() + "\\\n");
+                }
             }
-            if (more) {
-                channel = event.getGuild().getTextChannels().size() - max;
-                builder.append("And " + channel + " more...");
-            }
-
-            returning = builder.toString();
-        } else {
+            returning = dirs.append(files.toString()).toString();
+        } catch (Exception e) {
             returning = "This Folder is empty.";
         }
-
 
         List<String> commands = new ArrayList<>();
         commands.add(CommandOutputHandler.commandOutput("ls", returning));

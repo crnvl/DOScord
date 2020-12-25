@@ -29,7 +29,7 @@ public class DosStart implements Command {
         String returning;
         HashMap<String, String[]> fileCommands = new HashMap<>();
         if (args.length >= 1) {
-            File file = new File(System.getProperty("user.dir") + "/screens\\drive\\" + location.replace("U:\\", "") + "\\" + args[0] + ".dcScript");
+            File file = new File(System.getProperty("user.dir") + "\\screens\\drive\\" + location.replace("U:\\", "") + "\\" + args[0] + ".dcScript");
             if (file.exists()) {
                 String content = null;
                 try {
