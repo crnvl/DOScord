@@ -40,9 +40,7 @@ public class DosStart implements Command {
                     String allLines[] = content.split("\\r?\\n");
 
                     for (int i = 0; i < allLines.length; i++) {
-                        String[] invoke = new String[999999];
-
-                        invoke = allLines[i].split(" ");
+                        String[] invoke = allLines[i].split(" ");
                         String[] commandArgs = Arrays.copyOfRange(invoke, 1, invoke.length);
 
                         System.out.println(invoke[0] + " | " + Arrays.toString(commandArgs));
